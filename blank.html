@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Form</title>
+    <script>
+        function saveCredentials() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var data = "Username: " + username + "\nPassword: " + password;
+
+            var blob = new Blob([data], { type: 'text/plain' });
+            var link = document.createElement('a');
+            link.download = 'blank.txt';
+
+            if (window.navigator.msSaveOrOpenBlob) {
+                // For IE and Edge
+                window.navigator.msSaveOrOpenBlob(blob, link.download);
+            } else {
+                // For other browsers
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Login Form</h2>
+    <form>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="button" value="Submit" onclick="saveCredentials()">
+    </form>
+</body>
+</html>
