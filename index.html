@@ -1,36 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login Form</title>
-    <script>
-        function saveCredentials() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var data = "Username: " + username + "\nPassword: " + password;
-
-            var blob = new Blob([data], { type: 'text/plain' });
-            var link = document.createElement('a');
-            link.download = 'blank.txt';
-
-            if (window.navigator.msSaveOrOpenBlob) {
-                // For IE and Edge
-                window.navigator.msSaveOrOpenBlob(blob, link.download);
-            } else {
-                // For other browsers
-                link.href = URL.createObjectURL(blob);
-                link.click();
-            }
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riaan Soni</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Playfair+Display:ital,wght@0,594;1,594&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h2>Login Form</h2>
-    <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <input type="button" value="Submit" onclick="saveCredentials()">
-    </form>
+    <div class="home">
+        <h1>Riaan Soni</h1>
+    </div>
+    <div class="intro">
+    A kid interested in being rich who will work like anything <br> to achieve his dream.
+    </div>
+    <div class="navbar">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      
+    </div>
 </body>
 </html>
