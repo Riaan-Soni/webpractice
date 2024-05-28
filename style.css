@@ -50,5 +50,6 @@ body {
       
       .navbar a:hover {
         background-color: lightgray;
+        border-radius:21px;
       }
       
