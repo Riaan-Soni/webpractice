@@ -3,29 +3,766 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riaan Soni</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Playfair+Display:ital,wght@0,594;1,594&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <title>For You | The Moment I Choose You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e8e8e8;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 107, 129, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-glow {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 107, 129, 0.8);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+        }
+
+        /* Entry screen */
+        #entry {
+            opacity: 1;
+        }
+
+        #entry h1 {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            font-weight: 300;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            letter-spacing: 0.02em;
+        }
+
+        .enter-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 107, 129, 0.4);
+            color: #e8e8e8;
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+            text-transform: lowercase;
+        }
+
+        .enter-btn:hover {
+            background: rgba(255, 107, 129, 0.1);
+            border-color: rgba(255, 107, 129, 0.8);
+        }
+
+        /* Story sections */
+        .moment {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .moment-title {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .moment-visual {
+            margin: 3rem auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .moment-text {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Steam animation for noodles */
+        .steam {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .steam-line {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.3));
+            border-radius: 50%;
+            animation: rise 3s ease-in-out infinite;
+        }
+
+        .steam-line:nth-child(1) {
+            left: 40%;
+            animation-delay: 0s;
+        }
+
+        .steam-line:nth-child(2) {
+            left: 50%;
+            animation-delay: 0.5s;
+        }
+
+        .steam-line:nth-child(3) {
+            left: 60%;
+            animation-delay: 1s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Loading dots */
+        .loading-dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 107, 129, 0.6);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Mehendi drawing */
+        .mehendi {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .mehendi-path {
+            stroke: rgba(139, 69, 19, 0.8);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 4s ease forwards;
+        }
+
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Text bubble */
+        .text-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 129, 0.3);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .text-bubble::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            border: 2px solid rgba(255, 107, 129, 0.4);
+            border-radius: 25px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: circleGlow 2s ease-in-out 1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes circleGlow {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        /* Choice section */
+        .choice-container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .choice-question {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .choice-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .choice-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 107, 129, 0.3);
+            color: #e8e8e8;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .choice-btn:nth-child(1) { animation-delay: 0.2s; }
+        .choice-btn:nth-child(2) { animation-delay: 0.4s; }
+        .choice-btn:nth-child(3) { animation-delay: 0.6s; }
+
+        .choice-btn:hover {
+            background: rgba(255, 107, 129, 0.1);
+            border-color: rgba(255, 107, 129, 0.8);
+        }
+
+        .choice-reveal {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            line-height: 1.8;
+            font-style: italic;
+            opacity: 0;
+        }
+
+        .choice-reveal.show {
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        /* Rose section */
+        .rose-container {
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .rose-svg {
+            width: 200px;
+            height: 300px;
+            margin: 2rem auto;
+            opacity: 0;
+        }
+
+        .rose-svg.drawing {
+            opacity: 1;
+        }
+
+        .rose-path {
+            stroke: rgba(255, 107, 129, 0.8);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+        }
+
+        .rose-svg.drawing .rose-path {
+            animation: drawRose 5s ease forwards;
+        }
+
+        @keyframes drawRose {
+            to {
+                stroke-dashoffset: 0;
+                fill: rgba(255, 107, 129, 0.2);
+            }
+        }
+
+        .typing-text {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            line-height: 1.8;
+            margin: 2rem 0;
+            min-height: 200px;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .playlist-btn {
+            background: rgba(255, 107, 129, 0.2);
+            border: 1px solid rgba(255, 107, 129, 0.6);
+            color: #e8e8e8;
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .playlist-btn.show {
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .playlist-btn:hover {
+            background: rgba(255, 107, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: lowercase;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Crushed rose opening */
+        .crushed-rose {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .petal {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(139,0,0,0.8), rgba(255,107,129,0.6));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: scatterPetals 2s ease forwards;
+        }
+
+        .petal:nth-child(1) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation-delay: 0s;
+        }
+
+        .petal:nth-child(2) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            animation-delay: 0.1s;
+        }
+
+        .petal:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+            animation-delay: 0.2s;
+        }
+
+        .petal:nth-child(4) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(135deg);
+            animation-delay: 0.3s;
+        }
+
+        .petal:nth-child(5) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(180deg);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes scatterPetals {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(var(--rotation)) scale(1);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.3;
+                transform: translate(
+                    calc(-50% + var(--x)),
+                    calc(-50% + var(--y))
+                ) rotate(var(--rotation)) scale(0.7);
+            }
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            section {
+                padding: 1.5rem;
+            }
+            
+            .enter-btn,
+            .choice-btn,
+            .playlist-btn {
+                padding: 0.8rem 2rem;
+            }
+        }
+
+        /* Hide default cursor on touch devices */
+        @media (hover: none) {
+            .cursor,
+            .cursor-glow {
+                display: none;
+            }
+            
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="home">
-        <h1>Riaan Soni</h1>
-    </div>
-    <div class="intro">
-    A kid interested in being rich who will work like anything <br> to achieve his dream.
-    </div>
-    <div class="navbar">
-        <ul>
-          <li><a href="home.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-    </div>
+    <!-- Custom cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-glow"></div>
+
+    <!-- Entry Section -->
+    <section id="entry">
+        <h1>Out of every timeline…<br>I kept choosing you.</h1>
+        <button class="enter-btn" onclick="startExperience()">enter</button>
+        <div class="scroll-indicator" style="opacity: 0;">scroll</div>
+    </section>
+
+    <!-- Crushed Rose -->
+    <section id="crushed-rose" class="moment">
+        <div class="moment-title">today was supposed to be different</div>
+        <div class="crushed-rose moment-visual">
+            <div class="petal" style="--rotation: 0deg; --x: -80px; --y: -60px;"></div>
+            <div class="petal" style="--rotation: 72deg; --x: 40px; --y: -90px;"></div>
+            <div class="petal" style="--rotation: 144deg; --x: 90px; --y: 20px;"></div>
+            <div class="petal" style="--rotation: 216deg; --x: 10px; --y: 100px;"></div>
+            <div class="petal" style="--rotation: 288deg; --x: -70px; --y: 70px;"></div>
+        </div>
+        <div class="moment-text">
+            I was bringing you a rose.<br>
+            Life had other plans.<br>
+            But you were never about the rose.
+        </div>
+    </section>
+
+    <!-- Moment 1: Noodles -->
+    <section id="moment1" class="moment">
+        <div class="moment-title">noodles together</div>
+        <div class="steam moment-visual">
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+        </div>
+        <div class="moment-text">
+            I noticed this even if you didn't.
+        </div>
+    </section>
+
+    <!-- Moment 2: Waiting -->
+    <section id="moment2" class="moment">
+        <div class="moment-title">waiting for you</div>
+        <div class="loading-dots moment-visual">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="moment-text">
+            Every minute felt long.<br>
+            None of them felt wasted.
+        </div>
+    </section>
+
+    <!-- Moment 3: Mehendi -->
+    <section id="moment3" class="moment">
+        <div class="moment-title">your mehendi</div>
+        <div class="mehendi moment-visual">
+            <svg viewBox="0 0 150 150">
+                <path class="mehendi-path" d="M75,30 Q85,50 75,70 Q65,50 75,30 M75,70 Q90,85 85,100 M75,70 Q60,85 65,100 M75,70 L75,120 M75,100 Q80,110 75,120 M75,100 Q70,110 75,120"/>
+            </svg>
+        </div>
+        <div class="moment-text">
+            This was small for the world.<br>
+            Not for me.
+        </div>
+    </section>
+
+    <!-- Moment 4: "idkk😭" -->
+    <section id="moment4" class="moment">
+        <div class="moment-title">every time you said</div>
+        <div class="text-bubble moment-visual">
+            idkk😭
+        </div>
+        <div class="moment-text">
+            My favorite mystery.
+        </div>
+    </section>
+
+    <!-- Choice Moment -->
+    <section id="choice" class="moment">
+        <div class="choice-container">
+            <div class="choice-question">If I had one moment to redo…<br>which should it be?</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="revealChoice()">when you waited</button>
+                <button class="choice-btn" onclick="revealChoice()">when she was upset</button>
+                <button class="choice-btn" onclick="revealChoice()">today</button>
+            </div>
+            <div class="choice-reveal">
+                I wouldn't redo it.<br>
+                I'd show up better in it.
+            </div>
+        </div>
+    </section>
+
+    <!-- The Truth -->
+    <section id="truth" class="moment">
+        <div class="rose-container">
+            <div class="moment-title">here's what I meant to give you</div>
+            <svg class="rose-svg" viewBox="0 0 200 300">
+                <!-- Rose -->
+                <path class="rose-path" d="M100,100 Q80,90 70,100 Q60,110 70,120 Q80,130 90,125 Q95,122 100,125 Q105,122 110,125 Q120,130 130,120 Q140,110 130,100 Q120,90 100,100 M100,125 L100,250 M80,160 Q70,165 75,175 M120,160 Q130,165 125,175 M85,200 Q75,205 80,215 M115,200 Q125,205 120,215"/>
+                <!-- Stem -->
+                <path class="rose-path" d="M100,250 L100,280"/>
+            </svg>
+            <div class="typing-text"></div>
+            <a href="#" class="playlist-btn" onclick="openPlaylist()">🎵 for the drive home</a>
+        </div>
+    </section>
+
+    <script>
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorGlow = document.querySelector('.cursor-glow');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+
+        // Start experience
+        function startExperience() {
+            const entry = document.getElementById('entry');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            entry.style.opacity = '0';
+            setTimeout(() => {
+                entry.style.display = 'none';
+                scrollIndicator.style.opacity = '1';
+                observeSections();
+            }, 800);
+        }
+
+        // Intersection Observer for scroll reveal
+        function observeSections() {
+            const sections = document.querySelectorAll('section:not(#entry)');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.3
+            });
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // Choice reveal
+        function revealChoice() {
+            const buttons = document.querySelectorAll('.choice-btn');
+            const reveal = document.querySelector('.choice-reveal');
+            
+            buttons.forEach(btn => {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            });
+            
+            setTimeout(() => {
+                reveal.classList.add('show');
+            }, 600);
+        }
+
+        // Typewriter effect for final section
+        const finalText = `I don't promise perfect timing.
+I don't promise I'll never mess up.
+
+I promise real effort.
+I promise I see you.
+I promise I'm learning.
+
+And if you still want this—
+I choose you. Again.
+
+Not because of Valentine's Day.
+Because of every ordinary Tuesday that mattered more.`;
+
+        function typeWriter(text, element, speed = 50) {
+            let i = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Show playlist button after typing
+                    document.querySelector('.playlist-btn').classList.add('show');
+                }
+            }
+            
+            type();
+        }
+
+        // Observer for truth section
+        const truthObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const roseSvg = document.querySelector('.rose-svg');
+                    const typingText = document.querySelector('.typing-text');
+                    
+                    roseSvg.classList.add('drawing');
+                    
+                    setTimeout(() => {
+                        typeWriter(finalText, typingText);
+                    }, 2000);
+                    
+                    truthObserver.disconnect();
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        const truthSection = document.getElementById('truth');
+        if (truthSection) {
+            truthObserver.observe(truthSection);
+        }
+
+        // Playlist function (replace with your actual playlist link)
+        function openPlaylist() {
+            // Replace this URL with your actual Spotify/Apple Music playlist
+            window.open('https://open.spotify.com/playlist/your-playlist-id', '_blank');
+            return false;
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
